@@ -47,45 +47,31 @@
  *          [[ http://www.frozen-bubble.org/   ]]
  */
 
-function Sprite(spriteArea) {
-  this.spriteArea = spriteArea;
-  this.saved_id = -1;
+function Compressor(compressorHead, compressor) {
+  this.compressorHead = compressorHead;
+  this.compressor = compressor;
+  this.steps = 0;
 }
 
-Sprite.prototype.relativeMove = function relativeMove(x, y) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offset(x, y);
-};
-
-Sprite.prototype.absoluteMove = function absoluteMove(p) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offsetTo(p.x, p.y);
-};
-
-Sprite.prototype.getSpritePosition = function getSpritePosition() {
-  var spriteArea = this.spriteArea;
-  return new Point(spriteArea.left, spriteArea.top);
-};
-
-Sprite.prototype.getSpriteArea = function getSpriteArea() {
-  var spriteArea = this.spriteArea;
-  return spriteArea;
-};
-
-Sprite.drawImage = function drawImage(image, x, y, c, scale, dx, dy) {
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);  
-};
-
-Sprite.drawImageClipped = function drawImageClipped(image, x, y, clipr,
-                                                    c, scale, dx, dy) {
-  c.save(Canvas.CLIP_SAVE_FLAG);
-  c.clipRect((clipr.left * scale + dx),
-             (clipr.top * scale + dy),
-             (clipr.right * scale + dx),
-             (clipr.bottom * scale + dy),
-             Region.Op.REPLACE);
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);
-  c.restore();  
+Compressor.prototype.moveDown = function moveDown() {
+  this.steps++;
 }
+
+Compressor.prototype.paint = function paint(c, scale, dx, dy) {
+  var steps = this.steps, compressor = this.compressor, 
+      compressorHead = this.compressorHead;
+  for (var i = 0; i < steps; i++) {
+    c.drawBitmap(compressor.bmp,
+                 (235 * scale + dx),
+                 ((28 * i - 4) * scale + dy),
+                 null);
+    c.drawBitmap(compressor.bmp,
+                 (391 * scale + dx),
+                 ((28 * i - 4) * scale + dy),
+                 null);
+  }
+  c.drawBitmap(compressorHead.bmp,
+               (160 * scale + dx),
+               ((-7 + 28 * steps) * scale + dy),
+               null);
+};

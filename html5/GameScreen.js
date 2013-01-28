@@ -47,45 +47,35 @@
  *          [[ http://www.frozen-bubble.org/   ]]
  */
 
-function Sprite(spriteArea) {
-  this.spriteArea = spriteArea;
-  this.saved_id = -1;
+function GameScreen() {
+  this.sprites = new Vector();
 }
 
-Sprite.prototype.relativeMove = function relativeMove(x, y) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offset(x, y);
+GameScreen.prototype.addSprite = function addSprite(sprite) {
+  var sprites = this.sprites;
+  sprites.removeElement(sprite);
+  sprites.addElement(sprite);
 };
 
-Sprite.prototype.absoluteMove = function absoluteMove(p) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offsetTo(p.x, p.y);
+GameScreen.prototype.removeSprite = function removeSprite(sprite) {
+  var sprites = this.sprites;
+  sprites.removeElement(sprite);
 };
 
-Sprite.prototype.getSpritePosition = function getSpritePosition() {
-  var spriteArea = this.spriteArea;
-  return new Point(spriteArea.left, spriteArea.top);
+GameScreen.prototype.spriteToBack = function spriteToBack(sprite) {
+  var sprites = this.sprites;
+  sprites.removeElement(sprite);
+  sprites.insertElementAt(sprite, 0);
 };
 
-Sprite.prototype.getSpriteArea = function getSpriteArea() {
-  var spriteArea = this.spriteArea;
-  return spriteArea;
+GameScreen.prototype.spriteToFront = function spriteToFront(sprite) {
+  var sprites = this.sprites;
+  sprites.removeElement(sprite);
+  sprites.addElement(sprite);
 };
 
-Sprite.drawImage = function drawImage(image, x, y, c, scale, dx, dy) {
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);  
+GameScreen.prototype.paint = function paint(c, scale, dx, dy) {
+  var sprites = this.sprites;
+  for (var i = 0; i < sprites.size(); i++)
+    sprites.elementAt(i).paint(c, scale, dx, dy);
 };
-
-Sprite.drawImageClipped = function drawImageClipped(image, x, y, clipr,
-                                                    c, scale, dx, dy) {
-  c.save(Canvas.CLIP_SAVE_FLAG);
-  c.clipRect((clipr.left * scale + dx),
-             (clipr.top * scale + dy),
-             (clipr.right * scale + dx),
-             (clipr.bottom * scale + dy),
-             Region.Op.REPLACE);
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);
-  c.restore();  
-}

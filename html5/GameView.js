@@ -222,17 +222,16 @@ function GameThread(gameView, surfaceHolder, customLevels, startingLevel) {
   var mLauncher = this.mLauncher = res.getDrawable(R.drawable.launcher);
 
   //var mSoundManager = this.mSoundManager = new SoundManager(mContext);
+  var mSoundManager = this.mSoundManager = null;
 
   if (null === customLevels) {
     try {
-      /*
       var is = mContext.getAssets().open("levels.txt");
-      var level = is.read();
+      var levels = is.read();
       var sp = mContext.getSharedPreferences(FrozenBubble.PREFS_NAME, 
                                              Context.MODE_PRIVATE);
       this.startingLevel = sp.getInt("level", 0);
       this.mLevelManager = new LevelManager(levels, this.startingLevel);
-      */
     } catch (e) {
           // Should never happen.
       throw new RuntimeException(e);
@@ -243,14 +242,12 @@ function GameThread(gameView, surfaceHolder, customLevels, startingLevel) {
                                           this.startingLevel);
   }
 
-  /*
   this.mFrozenGame = new FrozenGame(mBackground, mBubbles, mBubblesBlind,
                                     mFrozenBubbles, mTargetedBubbles,
                                     mBubbleBlink, mGameWon, mGameLost,
                                     mHurry, mPenguins, mCompressorHead,
                                     mCompressor, mLauncher, 
                                     mSoundManager, this.mLevelManager);
-  */
 }
 
 GameThread.FRAME_DELAY = 40;
@@ -404,8 +401,8 @@ GameThread.prototype.drawLevelNumber = function drawLevelNumber(canvas) {
 };
 
 GameThread.prototype.doDraw = function doDraw(canvas) {
-  var mImagesReady = this.mImagesReady, mDisplayDX = this.mDisplayDX,
-      mDisplayDY = this.mDisplayDY;
+  var mImagesReady = this.mImagesReady, mDisplayScale = this.mDisplayScale,
+      mDisplayDX = this.mDisplayDX, mDisplayDY = this.mDisplayDY;
   //Log.i("frozen-bubble", "doDraw()");
   if (!mImagesReady) {
     //Log.i("frozen-bubble", "!mImagesReady, returning");
@@ -417,5 +414,5 @@ GameThread.prototype.doDraw = function doDraw(canvas) {
   }
   this.drawBackground(canvas);
   this.drawLevelNumber(canvas);
-  // this.mFrozenGame.paint(canvas, mDisplayScale, mDisplayDX, mDisplayDY);
+  this.mFrozenGame.paint(canvas, mDisplayScale, mDisplayDX, mDisplayDY);
 };

@@ -47,45 +47,21 @@
  *          [[ http://www.frozen-bubble.org/   ]]
  */
 
-function Sprite(spriteArea) {
-  this.spriteArea = spriteArea;
-  this.saved_id = -1;
+function ImageSprite (area, img) {
+  Sprite.call(this, area);
+
+  this.displayedImage = img;
 }
 
-Sprite.prototype.relativeMove = function relativeMove(x, y) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offset(x, y);
+ImageSprite.prototype = new Sprite(null);
+ImageSprite.prototype.constructor = ImageSprite;
+
+ImageSprite.prototype.changeImage = function changeImage(img) {
+  this.displayedImage = img;
 };
 
-Sprite.prototype.absoluteMove = function absoluteMove(p) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offsetTo(p.x, p.y);
-};
-
-Sprite.prototype.getSpritePosition = function getSpritePosition() {
-  var spriteArea = this.spriteArea;
-  return new Point(spriteArea.left, spriteArea.top);
-};
-
-Sprite.prototype.getSpriteArea = function getSpriteArea() {
-  var spriteArea = this.spriteArea;
-  return spriteArea;
-};
-
-Sprite.drawImage = function drawImage(image, x, y, c, scale, dx, dy) {
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);  
-};
-
-Sprite.drawImageClipped = function drawImageClipped(image, x, y, clipr,
-                                                    c, scale, dx, dy) {
-  c.save(Canvas.CLIP_SAVE_FLAG);
-  c.clipRect((clipr.left * scale + dx),
-             (clipr.top * scale + dy),
-             (clipr.right * scale + dx),
-             (clipr.bottom * scale + dy),
-             Region.Op.REPLACE);
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);
-  c.restore();  
+ImageSprite.prototype.paint = function paint(c, scale, dx, dy) {
+  var displayedImage = this.displayedImage;
+  var p = this.getSpritePosition();
+  Sprite.drawImage(displayedImage, p.x, p.y, c, scale, dx, dy);
 }

@@ -33,14 +33,38 @@ Activity.prototype.onCreate = function onCreate(savedInstanceState) {
 };
 
 Activity.prototype.requestWindowFeature = function requestWindowFeature(f) {
-}
+};
 
 Activity.prototype.getWindow = function getWindow() {
   return {setFlags: function(flag1, flag2){}};
+};
+
+Activity.prototype.getAssets = function getAssets() {
+  return ASSETS;
+};
+
+// @@ 实现本地存储
+Activity.prototype.getSharedPreferences = function getSharedPreferences(name, 
+                                                                        mode) {
+  return new SharedPreferences();
+};
+
+// android.content.Context
+var Context = {};
+
+Context.MODE_PRIVATE = 0;
+
+// android.content.res.AssetManager
+function AssetManager() {
 }
 
-// android.content.res.Resources
+AssetManager.prototype.open = function open(fileName) {
+  return new InputStream("assets/" + fileName);
+};
 
+var ASSETS = new AssetManager();
+
+// android.content.res.Resources
 function Resources() {
 }
 
@@ -48,7 +72,16 @@ Resources.prototype.getDrawable = function getDrawable(url) {
   return new BitmapDrawable(url);
 };
 
-RESOURCES = new Resources();
+var RESOURCES = new Resources();
+
+// android.content.SharedPreferences
+function SharedPreferences() {
+}
+
+// @@ 实现本地存储
+SharedPreferences.prototype.getInt = function getInt(key, defValue) {
+  return defValue
+};
 
 // android.graphics.Bitmap === HTMLImageElement
 var Bitmap = HTMLImageElement;
@@ -247,13 +280,45 @@ Paint.prototype.setAlpha = function setAlpha(alpha) {
   this.alpha = alpha / 255;
 };
 
-// android.graphics.Rect
-function Rect(left, top, right, bottom) {
-  this.left = left;
-  this.top = top;
-  this.right = right;
-  this.bottom = bottom;
+// android.graphics.Point
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
 }
+
+// android.graphics.Rect
+function Rect(left_or_r, top, right, bottom) {
+  if (arguments.length === 4) {
+    var left = left_or_r;
+    this.left = left;
+    this.top = top;
+    this.right = right;
+    this.bottom = bottom;
+  } else if (arguments.length === 1) {
+    var r = left_or_r;
+    this.left = r.left;
+    this.top = r.top;
+    this.right = r.right;
+    this.bottom = r.bottom;    
+  } else { 
+    if (arguments.length !== 0) throw TypeError("参数数量错误");
+  }
+}
+
+Rect.prototype.offsetTo = function offsetTo(newLeft, newTop) {
+  this.right = newLeft - this.left + this.right;
+  this.bottom = newTop - this.top + this.bottom;
+  this.left = newLeft;
+  this.top = newTop;
+};
+
+Rect.prototype.offset = function offset(dx, dy) {
+  this.right += dx
+  this.bottom += dy;
+  this.left += dx;
+  this.top += dy;
+};
+
 
 // android.graphics.Region
 var Region = {Op: {REPLACE: 2}};
@@ -275,8 +340,14 @@ BitmapDrawable.prototype.getIntrinsicHeight = function getIntrinsicHeight() {
   return this.img.height;
 };
 
-BitmapDrawable.prototype.setBounds = function setBounds(bounds) {
-  this.bounds = bounds;
+BitmapDrawable.prototype.setBounds = function setBounds(bounds_or_left,
+                                                        top, right, bottom) {
+  if (arguments.length === 1)
+    this.bounds = bounds_or_left;
+  else {
+    if (arguments.length !== 4) throw TypeError("参数数量错误");
+    this.bounds = new Rect(bounds_or_left, top, right, bottom);
+  }
 };
 
 BitmapDrawable.prototype.draw = function draw(c) {
@@ -404,10 +475,32 @@ var Window = {};
 // android.view.WindowManager
 var WindowManager = {LayoutParams: {}};
 
+// java.io.InputStream
+function InputStream(url) {
+  var script = document.querySelector("[src='" + url + "']");
+  if (!script) console.error("没找到 " + url);
+  this.script = script;  
+}
+
+InputStream.prototype.read = function read() {
+  return this.script.textContent;
+};
+
 // java.lang.Character
 var Character = {};
 Character.forDigit = function forDigit(digit, radix) {
   return digit.toString(radix);
+};
+
+// java.lang.RuntimeException
+function RuntimeException() {
+}
+
+// java.lang.System
+var System = {};
+
+System.currentTimeMillis = function currentTimeMillis() {
+  return Date.now();
 }
 
 // java.util.HashMap;
@@ -430,8 +523,11 @@ Array.prototype.add = Array.prototype.push;
 function Random() {
 }
 
-Random.prototype.nextInt = function nextInt(n) {
-  return Math.floor(Math.random() * n)
+Random.prototype.nextInt = function nextInt(n_or_) {
+  if (arguments === 1)
+    return Math.floor(Math.random() * n);
+  else
+    return Math.floor(Math.random() * 65536);
 };
 
 // java.util.Vector
@@ -447,3 +543,17 @@ Vector.prototype.size = function size() {
   return this.array.length;
 };
 
+Vector.prototype.elementAt = function elementAt(location) {
+  return this.array[location];
+};
+
+Vector.prototype.removeElement = function removeElement(object) {
+  var index = this.array.indexOf(object);
+  if (index !== -1)
+    this.array.splice(index, 1);
+};
+
+Vector.prototype. insertElementAt = function  insertElementAt(object, 
+                                                              location) {
+  this.array.splice(location, 0, object);
+};

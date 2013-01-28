@@ -65,7 +65,45 @@
  * limitations under the License.
  */
 
-function FrozenBubble(){
+function FrozenBubble() {
+  
 }
 
+FrozenBubble.SOUND_WON = 1;
+FrozenBubble.SOUND_LOST = 1;
+FrozenBubble.SOUND_LAUNCH = 2;
+FrozenBubble.SOUND_DESTROY = 3;
+FrozenBubble.SOUND_REBOUND = 4;
+FrozenBubble.SOUND_STICK = 5;
+FrozenBubble.SOUND_HURRY = 6;
+FrozenBubble.SOUND_NEWROOT = 7;
+FrozenBubble.SOUND_NOH = 8;
+FrozenBubble.NUM_SOUNDS = 9;
+
+FrozenBubble.GAME_NORMAL = 0;
+FrozenBubble.GAME_COLORBLIND = 1;
+
+FrozenBubble.MENU_COLORBLIND_MODE_ON = 1;
+FrozenBubble.MENU_COLORBLIND_MODE_OFF = 2;
+FrozenBubble.MENU_FULLSCREEN_ON = 3;
+FrozenBubble.MENU_FULLSCREEN_OFF = 4;
+FrozenBubble.MENU_SOUND_ON = 5;
+FrozenBubble.MENU_SOUND_OFF = 6;
+FrozenBubble.MENU_DONT_RUSH_ME = 7;
+FrozenBubble.MENU_RUSH_ME = 8;
+FrozenBubble.MENU_NEW_GAME = 9;
+FrozenBubble.MENU_ABOUT = 10;
+FrozenBubble.MENU_EDITOR = 11;
+FrozenBubble.MENU_TOUCHSCREEN_AIM_THEN_SHOOT = 12;
+FrozenBubble.MENU_TOUCHSCREEN_POINT_TO_SHOOT = 13;
+
+FrozenBubble.PREFS_NAME = "frozenbubble";
+
+FrozenBubble.gameMode = FrozenBubble.GAME_NORMAL;
+
 FrozenBubble.prototype = new Activity();
+
+FrozenBubble.getMode = function getMode() {
+  var gameMode = FrozenBubble.gameMode;
+  return gameMode;
+};

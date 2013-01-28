@@ -47,45 +47,62 @@
  *          [[ http://www.frozen-bubble.org/   ]]
  */
 
-function Sprite(spriteArea) {
-  this.spriteArea = spriteArea;
-  this.saved_id = -1;
+function BubbleManager(bubbles) {
+  this.bubbles = bubbles;
+  this.countBubbles = new Array(bubbles.length);
+  this.bubblesLeft = 0;
 }
 
-Sprite.prototype.relativeMove = function relativeMove(x, y) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offset(x, y);
+BubbleManager.prototype.addBubble = function addBubble(bubble) {
+  var countBubbles = this.countBubbles;
+  countBubbles[this.findBubble(bubble)]++;
+  this.bubblesLeft++;  
 };
 
-Sprite.prototype.absoluteMove = function absoluteMove(p) {
-  var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
-  spriteArea.offsetTo(p.x, p.y);
+BubbleManager.prototype.removeBubble = function removeBubble(bubble) {
+  var countBubbles = this.countBubbles;
+  countBubbles[this.findBubble(bubble)]--;
+  this.bubblesLeft--;  
 };
 
-Sprite.prototype.getSpritePosition = function getSpritePosition() {
-  var spriteArea = this.spriteArea;
-  return new Point(spriteArea.left, spriteArea.top);
+BubbleManager.prototype.countBubbles = function countBubbles() {
+  var bubbleLeft = this.bubbleLeft;
+  return bubbleLeft;
 };
 
-Sprite.prototype.getSpriteArea = function getSpriteArea() {
-  var spriteArea = this.spriteArea;
-  return spriteArea;
+BubbleManager.prototype.nextBubbleIndex = function nextBubbleIndex(rand) {
+  var bubbles = this.bubbles, countBubbles = this.countBubbles;
+  var select = rand.nextInt() % bubbles.length;
+
+  if (select < 0)
+    select = -select;
+
+  var count = -1;
+  var position = -1;
+
+  while (count !== select) {
+    position++;
+
+    if (position === bubbles.length)
+      position = 0;
+
+    if (countBubbles[position] != 0)
+      count++;
+  }
+
+  return position;  
 };
 
-Sprite.drawImage = function drawImage(image, x, y, c, scale, dx, dy) {
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);  
+BubbleManager.prototype.nextBubble = function nextBubble(rand) {
+  var bubbles = this.bubbles;
+  return bubbles[this.nextBubbleIndex(rand)];
 };
 
-Sprite.drawImageClipped = function drawImageClipped(image, x, y, clipr,
-                                                    c, scale, dx, dy) {
-  c.save(Canvas.CLIP_SAVE_FLAG);
-  c.clipRect((clipr.left * scale + dx),
-             (clipr.top * scale + dy),
-             (clipr.right * scale + dx),
-             (clipr.bottom * scale + dy),
-             Region.Op.REPLACE);
-  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);
-  c.restore();  
-}
+BubbleManager.prototype.findBubble = function nextBubble(bubble) {
+  var bubbles = this.bubbles;
+  for (var i = 0; i < bubbles.length; i++)
+      if (bubbles[i] == bubble)
+        return i;
+
+  return -1;
+};
