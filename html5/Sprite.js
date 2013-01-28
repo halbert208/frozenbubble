@@ -52,7 +52,18 @@ function Sprite(spriteArea) {
   this.saved_id = -1;
 }
 
-// 因为这里没有办法将 Bitmap 伸缩
 Sprite.drawImage = function drawImage(image, x, y, c, scale, dx, dy) {
   c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);  
+};
+
+Sprite.drawImageClipped = function drawImageClipped(image, x, y, clipr,
+                                                    c, scale, dx, dy) {
+  c.save(Canvas.CLIP_SAVE_FLAG);
+  c.clipRect((clipr.left * scale + dx),
+             (clipr.top * scale + dy),
+             (clipr.right * scale + dx),
+             (clipr.bottom * scale + dy),
+             Region.Op.REPLACE);
+  c.drawBitmap(image.bmp, (x * scale + dx), (y * scale + dy), null);
+  c.restore();  
 }

@@ -218,7 +218,7 @@ function GameThread(gameView, surfaceHolder, customLevels, startingLevel) {
   this.mLife = this.NewBmpWrap();
   var mFontImage = this.mFontImage = this.NewBmpWrap();
 
-  // this.mFont = new BubbleFont(mFontImage);
+  this.mFont = new BubbleFont(mFontImage);
   var mLauncher = this.mLauncher = res.getDrawable(R.drawable.launcher);
 
   //var mSoundManager = this.mSoundManager = new SoundManager(mContext);
@@ -372,7 +372,36 @@ GameThread.prototype.drawBackground = function drawBackground(c) {
       mDisplayDX = this.mDisplayDX, mDisplayDY = this.mDisplayDY;
   Sprite.drawImage(mBackground, 0, 0, c, mDisplayScale,
                    mDisplayDX, mDisplayDY);
-}
+};
+
+GameThread.prototype.drawLevelNumber = function drawLevelNumber(canvas) {
+  var mDisplayScale = this.mDisplayScale, mDisplayDX = this.mDisplayDX,
+      mDisplayDY = this.mDisplayDY, mFont = this.mFont;
+  var y = 433;
+  var x;
+  // var level = mLevelManager.getLevelIndex() + 1;
+  var level = 69;
+  if (level < 10) {
+    x = 185;
+    mFont.paintChar(Character.forDigit(level, 10), x, y, canvas,
+                    mDisplayScale, mDisplayDX, mDisplayDY);
+  } else if (level < 100) {
+    x = 178;
+    x += mFont.paintChar(Character.forDigit(Math.floor(level / 10), 10), 
+                         x, y, canvas, mDisplayScale, mDisplayDX, mDisplayDY);
+    mFont.paintChar(Character.forDigit(level % 10, 10), x, y, canvas,
+                    mDisplayScale, mDisplayDX, mDisplayDY);
+  } else {
+    x = 173;
+    x += mFont.paintChar(Character.forDigit(Math.floor(level / 100), 10), 
+                         x, y, canvas, mDisplayScale, mDisplayDX, mDisplayDY);
+    level -= 100 * Math.floor(level / 100);
+    x += mFont.paintChar(Character.forDigit(Math.floor(level / 10), 10), 
+                         x, y, canvas, mDisplayScale, mDisplayDX, mDisplayDY);
+    mFont.paintChar(Character.forDigit(level % 10, 10), x, y, canvas,
+                    mDisplayScale, mDisplayDX, mDisplayDY);
+  }
+};
 
 GameThread.prototype.doDraw = function doDraw(canvas) {
   var mImagesReady = this.mImagesReady, mDisplayDX = this.mDisplayDX,
@@ -387,6 +416,6 @@ GameThread.prototype.doDraw = function doDraw(canvas) {
     canvas.drawRGB(0, 0, 0);
   }
   this.drawBackground(canvas);
-  // this.drawLevelNumber(canvas);
+  this.drawLevelNumber(canvas);
   // this.mFrozenGame.paint(canvas, mDisplayScale, mDisplayDX, mDisplayDY);
 };

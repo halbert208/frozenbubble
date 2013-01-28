@@ -91,6 +91,8 @@ function Canvas() {
   this.ctx = this.canvas.getContext('2d');
 }
 
+Canvas.CLIP_SAVE_FLAG = 2;
+
 Canvas.prototype.drawLine = function drawLine(startX, startY, stopX, stopY, paint) {
   var ctx = this.ctx;
   ctx.globalAlpha = paint.alpha;
@@ -152,7 +154,26 @@ Canvas.prototype.drawBitmap = function drawBitMap(bitmap, src_or_left,
     var left = src_or_left, top = dst_or_top;
     ctx.drawImage(bitmap, left, top, bitmap.width, bitmap.height);
   }
-}
+};
+
+Canvas.prototype.save = function save(saveFlags) {
+  this.ctx.save();
+};
+
+Canvas.prototype.restore = function restore() {
+  this.ctx.restore();
+};
+
+Canvas.prototype.clipRect = function clipRect(left, top, right, bottom, op) {
+  var ctx = this.ctx;
+  ctx.beginPath();
+  ctx.moveTo(left, top);
+  ctx.lineTo(right, top);
+  ctx.lineTo(right, bottom);
+  ctx.lineTo(left, bottom);
+  ctx.closePath();
+  ctx.clip();
+};
 
 var CANVAS = new Canvas();
 
@@ -233,6 +254,9 @@ function Rect(left, top, right, bottom) {
   this.right = right;
   this.bottom = bottom;
 }
+
+// android.graphics.Region
+var Region = {Op: {REPLACE: 2}};
 
 // android.graphics.drawable.BitmapDrawable
 function BitmapDrawable(url) {
@@ -379,6 +403,12 @@ var Window = {};
 
 // android.view.WindowManager
 var WindowManager = {LayoutParams: {}};
+
+// java.lang.Character
+var Character = {};
+Character.forDigit = function forDigit(digit, radix) {
+  return digit.toString(radix);
+}
 
 // java.util.HashMap;
 Object.prototype.put = function put(hash, obj) {
