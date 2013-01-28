@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Frozen Bubble</title>
+  <style>
+   canvas { display: block; width: 100% }
+   body { margin: 0; }
+   img { display: none; }
+  </style>
+</head>
+
+<body>
+<canvas id="canvas"></canvas>
+<img src="res/drawable/app_frozen_bubble.png" />
+<img src="res/drawable/background.jpg" />
+<img src="res/drawable/bubble_1.gif" />
+<img src="res/drawable/bubble_2.gif" />
+<img src="res/drawable/bubble_3.gif" />
+<img src="res/drawable/bubble_4.gif" />
+<img src="res/drawable/bubble_5.gif" />
+<img src="res/drawable/bubble_6.gif" />
+<img src="res/drawable/bubble_7.gif" />
+<img src="res/drawable/bubble_8.gif" />
+<img src="res/drawable/bubble_blink.gif" />
+<img src="res/drawable/bubble_colourblind_1.gif" />
+<img src="res/drawable/bubble_colourblind_2.gif" />
+<img src="res/drawable/bubble_colourblind_3.gif" />
+<img src="res/drawable/bubble_colourblind_4.gif" />
+<img src="res/drawable/bubble_colourblind_5.gif" />
+<img src="res/drawable/bubble_colourblind_6.gif" />
+<img src="res/drawable/bubble_colourblind_7.gif" />
+<img src="res/drawable/bubble_colourblind_8.gif" />
+<img src="res/drawable/bubble_font.gif" />
+<img src="res/drawable/close_eyes.gif" />
+<img src="res/drawable/compressor.gif" />
+<img src="res/drawable/compressor_body.png" />
+<img src="res/drawable/fixed_1.gif" />
+<img src="res/drawable/fixed_2.gif" />
+<img src="res/drawable/fixed_3.gif" />
+<img src="res/drawable/fixed_4.gif" />
+<img src="res/drawable/fixed_5.gif" />
+<img src="res/drawable/fixed_6.gif" />
+<img src="res/drawable/frozen_1.gif" />
+<img src="res/drawable/frozen_2.gif" />
+<img src="res/drawable/frozen_3.gif" />
+<img src="res/drawable/frozen_4.gif" />
+<img src="res/drawable/frozen_5.gif" />
+<img src="res/drawable/frozen_6.gif" />
+<img src="res/drawable/frozen_7.gif" />
+<img src="res/drawable/frozen_8.gif" />
+<img src="res/drawable/hurry.gif" />
+<img src="res/drawable/launcher.png" />
+<img src="res/drawable/life.gif" />
+<img src="res/drawable/lose_panel.jpg" />
+<img src="res/drawable/penguins.jpg" />
+<img src="res/drawable/splash.jpg" />
+<img src="res/drawable/void_panel.jpg" />
+<img src="res/drawable/win_panel.jpg" />
+<!--
+<audio src="res/raw/blip.wav" preload="auto"></audio>
+<audio src="res/raw/city_destroyed.wav" preload="auto"></audio>
+<audio src="res/raw/missile_destroyed.wav" preload="auto"></audio>
+<audio src="res/raw/missile_launch.wav" preload="auto"></audio>
+<audio src="res/raw/player_error.wav" preload="auto"></audio>
+<audio src="res/raw/player_launch.wav" preload="auto"></audio>
+-->
+
+  <script>
+document.getElementById("canvas").width = window.innerWidth;
+document.getElementById("canvas").height = window.innerHeight;
+  </script>
+  <script src="compat.js"></script>
+  <script src="res.js"></script>
+  <script src="Sprite.js"></script>
+  <script src="BmpWrap.js"></script>
+  <script src="GameView.js"></script>
+  <script src="FrozenBubble.js"></script>
+
+  <script>
+var main = new FrozenBubble();
+var view = new GameView(main);
+view.getThread().setSurfaceSize(window.innerWidth, window.innerHeight);
+view.getThread().doDraw(CANVAS);
+  </script>
+  <!--
+14:52 ~
+ -->
+</body> </html>
