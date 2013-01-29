@@ -66,7 +66,7 @@
  */
 
 function FrozenBubble() {
-  
+  this.view = new GameView(this);
 }
 
 FrozenBubble.SOUND_WON = 1;
@@ -100,10 +100,23 @@ FrozenBubble.MENU_TOUCHSCREEN_POINT_TO_SHOOT = 13;
 FrozenBubble.PREFS_NAME = "frozenbubble";
 
 FrozenBubble.gameMode = FrozenBubble.GAME_NORMAL;
+FrozenBubble.soundOn = true;
+FrozenBubble.dontRushMe = false;
+FrozenBubble.aimThenShoot = false;
 
 FrozenBubble.prototype = new Activity();
 
 FrozenBubble.getMode = function getMode() {
   var gameMode = FrozenBubble.gameMode;
   return gameMode;
+};
+
+FrozenBubble.getAimThenShoot = function getAimThenShoot() {
+  var aimThenShoot = FrozenBubble.aimThenShoot;
+  return aimThenShoot;
+};
+
+FrozenBubble.getDontRushMe = function getDontRushMe() {
+  var dontRushMe = FrozenBubble.dontRushMe;
+  return dontRushMe;
 };

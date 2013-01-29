@@ -153,6 +153,7 @@ Canvas.prototype.drawCircle = function drawCircle(cx, cy, radius, paint) {
 
 Canvas.prototype.drawRGB = function drawRGB(r, g, b) {
   var ctx = this.ctx;
+  ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
   ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 };
@@ -415,6 +416,7 @@ MotionEvent.prototype.getY = function getX() {
 };
 
 MotionEvent.ACTION_DOWN = 0;
+MotionEvent.ACTION_MOVE = 2;
 
 document.addEventListener('click', function(event) {
     main.view.onTouchEvent(new MotionEvent
@@ -423,6 +425,21 @@ document.addEventListener('click', function(event) {
                             event.clientY));
   }, false);
 
+// android.view.SurfaceHolder
+function SurfaceHolder() {
+}
+
+SurfaceHolder.prototype.addCallback = function addCallback(callback) {
+};
+
+SurfaceHolder.prototype.lockCanvas = function lockCanvas(dirty) {
+  return CANVAS;
+};
+
+SurfaceHolder.prototype.unlockCanvasAndPost = 
+                                    function unlockCanvasAndPost(canvas) {
+};
+
 // android.view.SurfaceView
 function SurfaceView(context, attrs, defStyle) {
 }
@@ -430,7 +447,7 @@ function SurfaceView(context, attrs, defStyle) {
 SurfaceView.prototype = new View(null);
 
 SurfaceView.prototype.getHolder = function getHolder() {
-  return {addCallback: function(cb) {}};
+  return new SurfaceHolder;
 };
 
 // android.view.View
@@ -501,7 +518,15 @@ var System = {};
 
 System.currentTimeMillis = function currentTimeMillis() {
   return Date.now();
+};
+
+// java.lang.Thread
+function Thread() {
 }
+
+Thread.prototype.start = function start() {
+  setInterval(this.run.bind(this), 20);
+};
 
 // java.util.HashMap;
 Object.prototype.put = function put(hash, obj) {
@@ -522,6 +547,10 @@ Array.prototype.add = Array.prototype.push;
 // java.util.Random
 function Random() {
 }
+
+Random.prototype.nextDouble = function nextDouble() {
+  return Math.random();
+};
 
 Random.prototype.nextInt = function nextInt(n_or_) {
   if (arguments === 1)

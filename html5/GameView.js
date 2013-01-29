@@ -73,12 +73,12 @@ function GameView(context, attrs) {
   var holder = this.getHolder();
   holder.addCallback(this);
 
-  this.thread = new GameThread(this, holder, null, 0);
+  var thread = this.thread = new GameThread(this, holder, null, 0);
   this.setFocusable(true);
   this.setFocusableInTouchMode(true);
 
-  // this.thread.setRunning(true);
-  // this.thread.start();
+  thread.setRunning(true);
+  thread.start();
 }
 
 GameView.prototype = new SurfaceView(null);
@@ -88,7 +88,13 @@ GameView.prototype.getThread = function getThread() {
   return thread;
 };
 
+GameView.prototype.onTouchEvent = function onTouchEvent(event) {
+  var thread = this.thread;
+  return thread.doTouchEvent(event);
+};
+
 function GameThread(gameView, surfaceHolder, customLevels, startingLevel) {
+  this.mLastTime = 0;
   var mContext = gameView.mContext, STATE_PAUSE = GameThread.STATE_PAUSE;
   //Log.i("frozen-bubble", "GameThread()");
   this.mSurfaceHolder = surfaceHolder;
@@ -250,6 +256,9 @@ function GameThread(gameView, surfaceHolder, customLevels, startingLevel) {
                                     mSoundManager, this.mLevelManager);
 }
 
+GameThread.prototype = new Thread(null);
+GameThread.prototype.constructor = GameThread;
+
 GameThread.FRAME_DELAY = 40;
 GameThread.STATE_RUNNING = 1;
 GameThread.STATE_PAUSE = 2;
@@ -340,9 +349,65 @@ GameThread.prototype.NewBmpWrap = function NewBmpWrap() {
   return new_img;
 };
 
+GameThread.prototype.run = function run() {
+  /*
+  var FRAME_DELAY = GameThread.FRAME_DELAY, mLastTime = this.mLastTime;
+  var now = System.currentTimeMillis();
+  var delay = FRAME_DELAY + mLastTime - now;
+  if (delay > 0) {
+    return;
+  }
+  */
+
+  var mRun = this.mRun, mSurfaceHolder = this.mSurfaceHolder,
+      mMode = this.mMode, STATE_ABOUT = GameThread.STATE_ABOUT, 
+      STATE_RUNNING = GameThread.STATE_RUNNING;
+  if (!mRun) return;
+  // this.mLastTime = now;
+  var c = null;
+  try {
+    if (this.surfaceOK()) {
+      c = mSurfaceHolder.lockCanvas(null);
+      if (c != null) {
+
+        if (mRun) {
+          if (mMode == STATE_ABOUT) {
+            this.drawAboutScreen(c);
+          } else {
+            if (mMode == STATE_RUNNING) {
+              this.updateGameState();
+            }
+            this.doDraw(c);
+          }
+        }
+      }
+    }
+  } finally {
+    // do this in a finally so that if an exception is thrown
+    // during the above, we don't leave the Surface in an
+    // inconsistent state
+    if (c != null) {
+      mSurfaceHolder.unlockCanvasAndPost(c);
+    }
+  }  
+};
+
+GameThread.prototype.setRunning = function setRunning(b) {
+  this.mRun = b;
+};
+
 GameThread.prototype.setState = function setState(mode) {
   this.mMode = mode;
-}
+};
+
+GameThread.prototype.setSurfaceOK = function setSurfaceOK(ok) {
+  this.mSurfaceOK = ok;
+};
+
+GameThread.prototype.surfaceOK = function surfaceOK() {
+  var mSurfaceOK = this.mSurfaceOK;
+  return mSurfaceOK;
+};
 
 GameThread.prototype.setSurfaceSize = function setSurfaceSize(width, height) {
   var GAMEFIELD_WIDTH = GameThread.GAMEFIELD_WIDTH,
@@ -364,6 +429,52 @@ GameThread.prototype.setSurfaceSize = function setSurfaceSize(width, height) {
   this.resizeBitmaps();
 };
 
+GameThread.prototype.xFromScr = function xFromScr(x) {
+  var mDisplayDX = this.mDisplayDX, mDisplayScale = this.mDisplayScale;
+  return (x - mDisplayDX) / mDisplayScale;
+};
+
+GameThread.prototype.yFromScr = function yFromScr(y) {
+  var mDisplayDY = this.mDisplayDY, mDisplayScale = this.mDisplayScale;
+  return (y - mDisplayDY) / mDisplayScale;
+};
+
+GameThread.prototype.doTouchEvent = function doTouchEvent(event) {
+  var mMode = this.mMode, STATE_RUNNING = GameThread.STATE_RUNNING,
+      TOUCH_FIRE_Y_THRESHOLD = GameThread.TOUCH_FIRE_Y_THRESHOLD,
+      ATS_TOUCH_FIRE_Y_THRESHOLD = GameThread.ATS_TOUCH_FIRE_Y_THRESHOLD;
+  if (mMode != STATE_RUNNING) {
+    this.setState(STATE_RUNNING);
+  }
+
+  var x = this.xFromScr(event.getX());
+  var y = this.yFromScr(event.getY());
+
+  // Set the values used when Point To Shoot is on.
+  if (event.getAction() == MotionEvent.ACTION_DOWN) {
+    if (y < TOUCH_FIRE_Y_THRESHOLD) {
+      this.mTouchFire = true;
+      this.mTouchX = x;
+      this.mTouchY = y;
+    }
+  }
+
+  // Set the values used when Aim Then Shoot is on.
+  if (event.getAction() == MotionEvent.ACTION_DOWN) {
+    if (y < ATS_TOUCH_FIRE_Y_THRESHOLD) {
+      this.mATSTouchFire = true;
+    }
+    this.mATSTouchLastX = x;
+  } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+    if (y >= ATS_TOUCH_FIRE_Y_THRESHOLD) {
+      thi.smATSTouchDX = (x - mATSTouchLastX) * ATS_TOUCH_COEFFICIENT;
+    }
+    this.mATSTouchLastX = x;
+  }
+
+  return true;
+};
+
 GameThread.prototype.drawBackground = function drawBackground(c) {
   var mBackground = this.mBackground, mDisplayScale = this.mDisplayScale,
       mDisplayDX = this.mDisplayDX, mDisplayDY = this.mDisplayDY;
@@ -372,12 +483,12 @@ GameThread.prototype.drawBackground = function drawBackground(c) {
 };
 
 GameThread.prototype.drawLevelNumber = function drawLevelNumber(canvas) {
-  var mDisplayScale = this.mDisplayScale, mDisplayDX = this.mDisplayDX,
-      mDisplayDY = this.mDisplayDY, mFont = this.mFont;
+  var mLevelManager = this.mLevelManager, mDisplayScale = this.mDisplayScale,
+      mDisplayDX = this.mDisplayDX, mDisplayDY = this.mDisplayDY,
+      mFont = this.mFont;
   var y = 433;
   var x;
-  // var level = mLevelManager.getLevelIndex() + 1;
-  var level = 69;
+  var level = mLevelManager.getLevelIndex() + 1;
   if (level < 10) {
     x = 185;
     mFont.paintChar(Character.forDigit(level, 10), x, y, canvas,
@@ -415,4 +526,36 @@ GameThread.prototype.doDraw = function doDraw(canvas) {
   this.drawBackground(canvas);
   this.drawLevelNumber(canvas);
   this.mFrozenGame.paint(canvas, mDisplayScale, mDisplayDX, mDisplayDY);
+};
+
+GameThread.prototype.updateGameState = function updateGameState() {
+  var mFrozenGame = this.mFrozenGame, mLeft = this.mLeft,
+      mWasLeft = this.mWasLeft, mRight = this.mRight, 
+      mWasRight = this.mWasRight, mFire = this.mFire, mUp = this.mUp,
+      mWasFire = this.mWasFire, mWasUp = this.mWasUp,
+      mTrackballDX = this.mTrackballDX, mTouchFire = this.mTouchFire,
+      mTouchX = this.mTouchX, mTouchY = this.mTouchY,
+      mATSTouchFire = this.mATSTouchFire, mATSTouchDX = this.mATSTouchDX;
+  if (mFrozenGame.play(mLeft || mWasLeft, mRight || mWasRight,
+                       mFire || mUp || mWasFire || mWasUp,
+                       mTrackballDX,
+                       mTouchFire, mTouchX, mTouchY,
+                       mATSTouchFire, mATSTouchDX)) {
+    // Lost or won.  Need to start over.  The level is already
+    // incremented if this was a win.
+    this.mFrozenGame = new FrozenGame(mBackground, mBubbles, mBubblesBlind,
+                                      mFrozenBubbles, mTargetedBubbles,
+                                      mBubbleBlink, mGameWon, mGameLost,
+                                      mHurry, mPenguins, mCompressorHead,
+                                      mCompressor, mLauncher, mSoundManager,
+                                      mLevelManager);
+  }
+  this.mWasLeft = false;
+  this.mWasRight = false;
+  this.mWasFire = false;
+  this.mWasUp = false;
+  this.mTrackballDX = 0;
+  this.mTouchFire = false;
+  this.mATSTouchFire = false;
+  this.mATSTouchDX = 0;
 };

@@ -89,7 +89,7 @@ PenguinSprite.prototype.updateState = function updateState(state) {
   if (finalState != STATE_VOID) {
     this.count++;
 
-    if (tihs.count % 6 === 0) {
+    if (this.count % 6 === 0) {
       if (finalState === STATE_GAME_LOST) {
         this.currentPenguin = LOST_SEQUENCE[this.nextPosition][1];
         this.nextPosition = LOST_SEQUENCE[this.nextPosition][0];
@@ -99,7 +99,7 @@ PenguinSprite.prototype.updateState = function updateState(state) {
       }
     }
   } else {
-    count++;
+    this.count++;
 
     switch(state) {
     case STATE_TURN_LEFT :

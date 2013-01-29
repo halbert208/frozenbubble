@@ -49,18 +49,18 @@
 
 function BubbleManager(bubbles) {
   this.bubbles = bubbles;
-  this.countBubbles = new Array(bubbles.length);
+  this.bubbleCount = new Array(bubbles.length);
   this.bubblesLeft = 0;
 }
 
 BubbleManager.prototype.addBubble = function addBubble(bubble) {
-  var countBubbles = this.countBubbles;
+  var countBubbles = this.bubbleCount;
   countBubbles[this.findBubble(bubble)]++;
   this.bubblesLeft++;  
 };
 
 BubbleManager.prototype.removeBubble = function removeBubble(bubble) {
-  var countBubbles = this.countBubbles;
+  var countBubbles = this.bubbleCount;
   countBubbles[this.findBubble(bubble)]--;
   this.bubblesLeft--;  
 };
@@ -71,7 +71,7 @@ BubbleManager.prototype.countBubbles = function countBubbles() {
 };
 
 BubbleManager.prototype.nextBubbleIndex = function nextBubbleIndex(rand) {
-  var bubbles = this.bubbles, countBubbles = this.countBubbles;
+  var bubbles = this.bubbles, countBubbles = this.bubbleCount;
   var select = rand.nextInt() % bubbles.length;
 
   if (select < 0)

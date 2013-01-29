@@ -1190,12 +1190,16 @@ document.getElementById("canvas").height = window.innerHeight;
 
   <script>
 var main = new FrozenBubble();
-var view = new GameView(main);
-view.getThread().setSurfaceSize(window.innerWidth, window.innerHeight);
-view.getThread().doDraw(CANVAS);
+main.view.getThread().setSurfaceSize(window.innerWidth, window.innerHeight);
+main.view.getThread().setSurfaceOK(true);
+main.view.getThread().run(true);
+
   </script>
   <!--
 14:52 ~ 02:33    16 hours
+06:15 ~ 08:15    2 hours
+11:30 ~ 13:30    1 hour
+14: hour
 
  -->
 </body> </html>

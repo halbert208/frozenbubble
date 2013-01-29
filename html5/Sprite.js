@@ -52,15 +52,20 @@ function Sprite(spriteArea) {
   this.saved_id = -1;
 }
 
+Sprite.prototype.changeSpriteArea = function changeSpriteArea(newArea) {
+  this.spriteArea = newArea;
+}
+
+
 Sprite.prototype.relativeMove = function relativeMove(x, y) {
   var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
+  spriteArea = this.spriteArea = new Rect(spriteArea);
   spriteArea.offset(x, y);
 };
 
 Sprite.prototype.absoluteMove = function absoluteMove(p) {
   var spriteArea = this.spriteArea;
-  spriteArea = new Rect(spriteArea);
+  spriteArea = this.spriteArea = new Rect(spriteArea);
   spriteArea.offsetTo(p.x, p.y);
 };
 
