@@ -68,8 +68,8 @@ BubbleManager.prototype.removeBubble = function removeBubble(bubble) {
 };
 
 BubbleManager.prototype.countBubbles = function countBubbles() {
-  var bubbleLeft = this.bubbleLeft;
-  return bubbleLeft;
+  var bubblesLeft = this.bubblesLeft;
+  return bubblesLeft;
 };
 
 BubbleManager.prototype.nextBubbleIndex = function nextBubbleIndex(rand) {
