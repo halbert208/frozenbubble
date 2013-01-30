@@ -418,11 +418,12 @@ MotionEvent.prototype.getY = function getX() {
 MotionEvent.ACTION_DOWN = 0;
 MotionEvent.ACTION_MOVE = 2;
 
-document.addEventListener('click', function(event) {
+CANVAS.canvas.addEventListener('touchstart', function(event) {
     main.view.onTouchEvent(new MotionEvent
                            (MotionEvent.ACTION_DOWN, 
-                            event.clientX, 
-                            event.clientY));
+                            event.changedTouches[0].clientX, 
+                            event.changedTouches[0].clientY));
+    event.preventDefault();
   }, false);
 
 // android.view.SurfaceHolder
