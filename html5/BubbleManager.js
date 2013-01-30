@@ -50,6 +50,8 @@
 function BubbleManager(bubbles) {
   this.bubbles = bubbles;
   this.bubbleCount = new Array(bubbles.length);
+  for (var i = 0; i < this.bubbleCount.length; i++)
+    this.bubbleCount[i] = 0;
   this.bubblesLeft = 0;
 }
 
@@ -101,7 +103,7 @@ BubbleManager.prototype.nextBubble = function nextBubble(rand) {
 BubbleManager.prototype.findBubble = function nextBubble(bubble) {
   var bubbles = this.bubbles;
   for (var i = 0; i < bubbles.length; i++)
-      if (bubbles[i] == bubble)
+      if (bubbles[i] === bubble)
         return i;
 
   return -1;
