@@ -227,8 +227,7 @@ function GameThread(gameView, surfaceHolder, customLevels, startingLevel) {
   this.mFont = new BubbleFont(mFontImage);
   var mLauncher = this.mLauncher = res.getDrawable(R.drawable.launcher);
 
-  //var mSoundManager = this.mSoundManager = new SoundManager(mContext);
-  var mSoundManager = this.mSoundManager = null;
+  var mSoundManager = this.mSoundManager = new SoundManager(mContext);
 
   if (null === customLevels) {
     try {

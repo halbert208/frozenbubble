@@ -22,6 +22,9 @@
 function Activity() {
 }
 
+Activity.prototype = new Context();
+Activity.prototype.constructor = Activity;
+
 Activity.prototype.getResources = function getResources() {
   return RESOURCES;
 };
@@ -50,9 +53,19 @@ Activity.prototype.getSharedPreferences = function getSharedPreferences(name,
 };
 
 // android.content.Context
-var Context = {};
+function Context() {
+}
 
 Context.MODE_PRIVATE = 0;
+Context.AUDIO_SERVICE = "audio";
+
+Context.prototype.getSystemService = function getSystemService(name) {
+  switch (name) {
+  case Context.AUDIO_SERVICE:
+  return new AudioManager();
+  }
+};
+
 
 // android.content.res.AssetManager
 function AssetManager() {
@@ -365,8 +378,16 @@ BitmapDrawable.prototype.getBitmap = function getBitmap() {
 };
 
 // android.media.AudioManager
-var AudioManager = {};
+function AudioManager() {
+}
+
 AudioManager.STREAM_MUSIC = 3;
+
+AudioManager.prototype.getStreamVolume = function getStreamVolume(streamType) {
+};
+
+AudioManager.prototype.getStreamMaxVolume = function getStreamMaxVolume(streamType) {
+};
 
 // android.media.SoundPool
 function SoundPool(maxStreams, streamType, srcQuality) {
@@ -384,6 +405,7 @@ SoundPool.prototype.stop = function stop(streamID) {
 
 SoundPool.prototype.play = function play(soundID, leftVolume, rightVolume, priority, loop, rate) {
   var audio = document.querySelector("[src='" + soundID + "']");
+  if (!audio) console.error("没找到 " + soundID);
   if (loop)
     audio.loop = true;
   audio.play();
@@ -426,7 +448,7 @@ CANVAS.canvas.addEventListener('touchstart', function(event) {
     event.preventDefault();
   }, false);
 
-/*
+
 CANVAS.canvas.addEventListener('click', function(event) {
     main.view.onTouchEvent(new MotionEvent
                            (MotionEvent.ACTION_DOWN, 
@@ -434,7 +456,7 @@ CANVAS.canvas.addEventListener('click', function(event) {
                             event.clientY));
     event.preventDefault();
   }, false);
-*/
+
 
 // android.view.SurfaceHolder
 function SurfaceHolder() {

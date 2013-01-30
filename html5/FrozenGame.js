@@ -186,8 +186,8 @@ FrozenGame.prototype.initFrozenify = function initFrozenify() {
 };
 
 FrozenGame.prototype.frozenify = function frozenify() {
-  var gameLost = this.gameLost, bubblePlay = this.bubblePlay,
-      launchBubble = this.launchBubble;
+  var gameLost = this.gameLost, soundManager = this.soundManager,
+      bubblePlay = this.bubblePlay, launchBubble = this.launchBubble
   this.frozenifyX--;
   if (this.frozenifyX < 0) {
     this.frozenifyX = 7;
@@ -196,7 +196,7 @@ FrozenGame.prototype.frozenify = function frozenify() {
     if (this.frozenifyY < 0) {
       this.callFrozenify = false;
       this.addSprite(new ImageSprite(new Rect(152, 190, 337, 116), gameLost));
-        // soundManager.playSound(FrozenBubble.SOUND_NOH);
+      soundManager.playSound(FrozenBubble.SOUND_NOH);
 
         return;
       }
@@ -213,7 +213,7 @@ FrozenGame.prototype.frozenify = function frozenify() {
         this.callFrozenify = false;
         this.addSprite(new ImageSprite(new Rect(152, 190, 337, 116),
                                        gameLost));
-        // soundManager.playSound(FrozenBubble.SOUND_NOH);
+        soundManager.playSound(FrozenBubble.SOUND_NOH);
 
         return;
       }
@@ -278,7 +278,7 @@ FrozenGame.prototype.nextColor = function nextColor() {
 FrozenGame.prototype.sendBubblesDown = function sendBubblesDown() {
   var soundManager = this.soundManager, bubblePlay = this.bubblePlay,
       penguin = this.penguin, compressor = this.compressor;
-  // soundManager.playSound(FrozenBubble.SOUND_NEWROOT);
+  soundManager.playSound(FrozenBubble.SOUND_NEWROOT);
 
   for (var i = 0;i < 8; i++) {
     for (var j = 0; j < 12; j++) {
@@ -290,7 +290,7 @@ FrozenGame.prototype.sendBubblesDown = function sendBubblesDown() {
           this.endOfGame = true;
           this.initFrozenify();
 
-          // soundManager.playSound(FrozenBubble.SOUND_LOST);
+          soundManager.playSound(FrozenBubble.SOUND_LOST);
         }
       }
     }
@@ -407,7 +407,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
         launchBubble.changeColor(currentColor);
         penguin.updateState(PenguinSprite.STATE_FIRE);
 
-        // soundManager.playSound(FrozenBubble.SOUND_LAUNCH);
+        soundManager.playSound(FrozenBubble.SOUND_LAUNCH);
 
         this.readyToFire = false;
         this.hurryTime = 0;
@@ -454,7 +454,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
         this.endOfGame = true;
         this.initFrozenify();
 
-        // soundManager.playSound(FrozenBubble.SOUND_LOST);
+        soundManager.playSound(FrozenBubble.SOUND_LOST);
       } else if (bubbleManager.countBubbles() === 0) {
         penguin.updateState(PenguinSprite.STATE_GAME_WON);
         this.addSprite(new ImageSprite(new Rect(152, 190, 337, 116),
@@ -464,7 +464,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
         this.levelCompleted = true;
         this.endOfGame = true;
 
-        // soundManager.playSound(FrozenBubble.SOUND_WON);
+        soundManager.playSound(FrozenBubble.SOUND_WON);
       } else {
         this.fixedBubbles++;
         this.blinkDelay = 0;
@@ -486,7 +486,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
           this.endOfGame = true;
           this.initFrozenify();
 
-          // soundManager.playSound(FrozenBubble.SOUND_LOST);
+          soundManager.playSound(FrozenBubble.SOUND_LOST);
         } else if (bubbleManager.countBubbles() === 0) {
           penguin.updateState(PenguinSprite.STATE_GAME_WON);
           this.addSprite(new ImageSprite(new Rect(152, 190,
@@ -496,7 +496,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
           //highscoreManager.endLevel(nbBubbles);
           this.endOfGame = true;
           this.levelCompleted = true;
-          // soundManager.playSound(FrozenBubble.SOUND_WON);
+          soundManager.playSound(FrozenBubble.SOUND_WON);
         } else {
           this.fixedBubbles++;
           this.blinkDelay = 0;
@@ -523,7 +523,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
     if (this.hurryTime >= 240) {
       if (this.hurryTime % 40 === 10) {
         this.addSprite(hurrySprite);
-        // soundManager.playSound(FrozenBubble.SOUND_HURRY);
+        soundManager.playSound(FrozenBubble.SOUND_HURRY);
       } else if (this.hurryTime % 40 === 35) {
         this.removeSprite(hurrySprite);
       }

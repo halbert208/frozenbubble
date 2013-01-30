@@ -111,6 +111,11 @@ FrozenBubble.getMode = function getMode() {
   return gameMode;
 };
 
+FrozenBubble.getSoundOn = function getSoundOn() {
+  var soundOn = FrozenBubble.soundOn;
+  return soundOn;
+};
+
 FrozenBubble.getAimThenShoot = function getAimThenShoot() {
   var aimThenShoot = FrozenBubble.aimThenShoot;
   return aimThenShoot;

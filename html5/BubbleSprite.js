@@ -198,11 +198,11 @@ BubbleSprite.prototype.move = function move() {
   if (realX >= 414) {
     this.moveX = -moveX;
     realX = this.realX += (414 - realX);
-    // soundManager.playSound(FrozenBubble.SOUND_REBOUND);
+    soundManager.playSound(FrozenBubble.SOUND_REBOUND);
   } else if (realX <= 190) {
     this.moveX = -moveX;
     realX = this.realX += (190 - realX);
-    // soundManager.playSound(FrozenBubble.SOUND_REBOUND);
+    soundManager.playSound(FrozenBubble.SOUND_REBOUND);
   }
 
   var realY = this.realY += moveY;
@@ -255,14 +255,14 @@ BubbleSprite.prototype.move = function move() {
         }
       }
 
-      // soundManager.playSound(FrozenBubble.SOUND_DESTROY);
+      soundManager.playSound(FrozenBubble.SOUND_DESTROY);
     } else {
       bubbleManager.addBubble(bubbleFace);
       grid[currentPosition.x][currentPosition.y] = this;
       this.moveX = 0;
       this.moveY = 0;
       this.fixedAnim = 0;
-      // soundManager.playSound(FrozenBubble.SOUND_STICK);
+      soundManager.playSound(FrozenBubble.SOUND_STICK);
     }
   }
 
