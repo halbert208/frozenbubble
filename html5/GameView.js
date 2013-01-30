@@ -422,9 +422,9 @@ GameThread.prototype.setSurfaceSize = function setSurfaceSize(width, height) {
     this.mDisplayDY = 0;
   } else {
     this.mDisplayScale = 1.0 * width / GAMEFIELD_WIDTH;
-    this.mDisplayDX = (-this.mDisplayScale *
+    this.mDisplayDX = (- this.mDisplayScale *
                        (EXTENDED_GAMEFIELD_WIDTH - GAMEFIELD_WIDTH) / 2);
-    this.mDisplayDY = ((height - mDisplayScale * GAMEFIELD_HEIGHT) / 2);
+    this.mDisplayDY = ((height - this.mDisplayScale * GAMEFIELD_HEIGHT) / 2);
   }
   this.resizeBitmaps();
 };

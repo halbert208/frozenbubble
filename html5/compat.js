@@ -426,6 +426,16 @@ CANVAS.canvas.addEventListener('touchstart', function(event) {
     event.preventDefault();
   }, false);
 
+/*
+CANVAS.canvas.addEventListener('click', function(event) {
+    main.view.onTouchEvent(new MotionEvent
+                           (MotionEvent.ACTION_DOWN, 
+                            event.clientX, 
+                            event.clientY));
+    event.preventDefault();
+  }, false);
+*/
+
 // android.view.SurfaceHolder
 function SurfaceHolder() {
 }
