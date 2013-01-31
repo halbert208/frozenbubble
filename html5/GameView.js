@@ -534,7 +534,17 @@ GameThread.prototype.updateGameState = function updateGameState() {
       mWasFire = this.mWasFire, mWasUp = this.mWasUp,
       mTrackballDX = this.mTrackballDX, mTouchFire = this.mTouchFire,
       mTouchX = this.mTouchX, mTouchY = this.mTouchY,
-      mATSTouchFire = this.mATSTouchFire, mATSTouchDX = this.mATSTouchDX;
+      mATSTouchFire = this.mATSTouchFire, mATSTouchDX = this.mATSTouchDX,
+      mBackground = this.mBackground, mBubbles = this.mBubbles,
+      mBubblesBlind = this.mBubblesBlind, mFrozenBubbles = this.mFrozenBubbles,
+      mTargetedBubbles = this.mTargetedBubbles, 
+      mBubbleBlink = this.mBubbleBlink,
+      mGameWon = this.mGameWon, mGameLost = this.mGameLost,
+      mHurry = this.mHurry, mPenguins = this.mPenguins,
+      mCompressorHead = this.mCompressorHead, mCompressor = this.mCompressor,
+      mLauncher = this.mLauncher, mSoundManager = this.mSoundManager,
+      mLevelManager = this.mLevelManager;
+
   if (mFrozenGame.play(mLeft || mWasLeft, mRight || mWasRight,
                        mFire || mUp || mWasFire || mWasUp,
                        mTrackballDX,

@@ -318,6 +318,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
       KEY_LEFT = FrozenGame.KEY_LEFT, KEY_RIGHT = FrozenGame.KEY_RIGHT,
       KEY_UP = FrozenGame.KEY_UP,
       endOfGame = this.endOfGame, levelCompleted = this.levelCompleted,
+      levelManager = this.levelManager,
       penguin = this.penguin, frozenify = this.callFrozenify,
       movingBubble = this.movingBubble, currentColor = this.currentColor,
       random = this.random;
