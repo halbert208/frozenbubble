@@ -69,7 +69,7 @@ function FrozenBubble() {
   this.view = new GameView(this);
 }
 
-FrozenBubble.SOUND_WON = 1;
+FrozenBubble.SOUND_WON = 0;
 FrozenBubble.SOUND_LOST = 1;
 FrozenBubble.SOUND_LAUNCH = 2;
 FrozenBubble.SOUND_DESTROY = 3;
