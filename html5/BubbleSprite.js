@@ -431,7 +431,7 @@ BubbleSprite.prototype.fall = function fall() {
   this.isFixed = false;
 
   this.moveY += FALL_SPEED;
-  this.realY += moveY;
+  this.realY += this.moveY;
 
   this.absoluteMove(new Point(this.realX, this.realY));
 
