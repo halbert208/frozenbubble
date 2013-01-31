@@ -444,6 +444,7 @@ BubbleSprite.prototype.blink = function blink() {
 };
 
 BubbleSprite.prototype.frozenify = function frozenify() {
+  var frozenFace = this.frozenFace;
   this.changeSpriteArea(new Rect(this.getSpritePosition().x - 1, 
                                  this.getSpritePosition().y - 1,
                                  34, 42));
