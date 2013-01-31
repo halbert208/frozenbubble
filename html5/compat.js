@@ -406,6 +406,7 @@ SoundPool.prototype.stop = function stop(streamID) {
 SoundPool.prototype.play = function play(soundID, leftVolume, rightVolume, priority, loop, rate) {
   var audio = document.querySelector("[src='" + soundID + "']");
   if (!audio) console.error("没找到 " + soundID);
+  this.stop(soundID);
   if (loop)
     audio.loop = true;
   audio.play();
