@@ -222,6 +222,13 @@ Canvas.prototype.clipRect = function clipRect(left, top, right, bottom, op) {
   ctx.clip();
 };
 
+Canvas.prototype.rotate = function rotate(degrees, px, py) {
+  var ctx = this.ctx;
+  ctx.translate(px, py);
+  ctx.rotate(degrees * (Math.PI * 2 / 360));
+  ctx.translate(-px, -py);
+};
+
 var CANVAS = new Canvas();
 
 // android.graphics.Color

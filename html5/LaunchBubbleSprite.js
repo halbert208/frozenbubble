@@ -85,8 +85,8 @@ LaunchBubbleSprite.prototype.paint = function paint(c, scale, dx, dy) {
   c.save();
   var xCenter = 318;
   var yCenter = 406;
-  // c.rotate((0.025 * 180 * (currentDirection - 20)),
-  //         (xCenter * scale + dx), (yCenter * scale + dy));
+  c.rotate((0.025 * 180 * (currentDirection - 20)),
+           (xCenter * scale + dx), (yCenter * scale + dy));
   launcher.setBounds(((xCenter - 50) * scale + dx),
                      ((yCenter - 50) * scale + dy),
                      ((xCenter + 50) * scale + dx),
