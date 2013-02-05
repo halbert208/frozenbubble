@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <meta name="oupengmobile" content="fullscreen, portrait, game" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>Frozen Bubble</title>
   <style>
@@ -1180,8 +1181,10 @@
 <audio src="res/raw/stick.ogg" preload="auto"></audio>
 
   <script>
-document.getElementById("canvas").width = window.innerWidth;
-document.getElementById("canvas").height = window.innerHeight;
+document.getElementById("canvas").width = Math.min(window.innerWidth,
+                                                   window.innerHeight);
+document.getElementById("canvas").height = Math.max(window.innerHeight,
+                                                    window.innerWidth);
   </script>
   <script src="compat.js"></script>
   <script src="res.js"></script>
@@ -1203,7 +1206,10 @@ document.getElementById("canvas").height = window.innerHeight;
 
   <script>
 var main = new FrozenBubble();
-main.view.getThread().setSurfaceSize(window.innerWidth, window.innerHeight);
+main.view.getThread().setSurfaceSize(Math.min(window.innerWidth, 
+                                              window.innerHeight), 
+                                     Math.max(window.innerHeight,
+                                              window.innerWidth));
 main.view.getThread().setSurfaceOK(true);
 main.view.getThread().run(true);
 
