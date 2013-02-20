@@ -1180,14 +1180,6 @@
 <audio src="res/raw/rebound.ogg" preload="auto"></audio>
 <audio src="res/raw/stick.ogg" preload="auto"></audio>
 
-  <script>
-/*document.getElementById("canvas").width = Math.min(window.innerWidth,
-                                                   window.innerHeight);
-document.getElementById("canvas").height = Math.max(window.innerHeight,
-                                                    window.innerWidth);*/
-document.getElementById("canvas").width = window.innerWidth;
-document.getElementById("canvas").height = window.innerHeight;
-  </script>
   <script src="compat.js"></script>
   <script src="res.js"></script>
   <script src="SoundManager.js"></script>
@@ -1224,15 +1216,16 @@ Array.prototype.slice.call(document.querySelectorAll('img')).forEach(function(im
 if (!toLoad) startGame();
 var main;
 function startGame() {
+document.getElementById("canvas").width = Math.min(window.innerWidth,
+                                                   window.innerHeight);
+document.getElementById("canvas").height = Math.max(window.innerHeight,
+                                                    window.innerWidth);
 
 main = new FrozenBubble();
-/*main.view.getThread().setSurfaceSize(Math.min(window.innerWidth, 
+main.view.getThread().setSurfaceSize(Math.min(window.innerWidth, 
                                               window.innerHeight), 
                                      Math.max(window.innerHeight,
-                                              window.innerWidth)); */
-
-main.view.getThread().setSurfaceSize(window.innerWidth, 
-                                     window.innerHeight);
+                                              window.innerWidth));
 
 main.view.getThread().setSurfaceOK(true);
 main.view.getThread().run(true);
