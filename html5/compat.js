@@ -566,7 +566,28 @@ function Thread() {
 }
 
 Thread.prototype.start = function start() {
-  setInterval(this.run.bind(this), 20);
+  var callback = this.run.bind(this);
+  if (window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      window.oRequestAnimationFrame) {
+    var animate = function () {
+      callback();
+      (window.requestAnimationFrame ||
+       window.webkitRequestAnimationFrame ||
+       window.mozRequestAnimationFrame ||
+       window.msRequestAnimationFrame ||
+       window.oRequestAnimationFrame)(animate);
+    };
+    (window.requestAnimationFrame ||
+     window.webkitRequestAnimationFrame ||
+     window.mozRequestAnimationFrame ||
+     window.msRequestAnimationFrame ||
+     window.oRequestAnimationFrame)(animate);
+  } else {
+    setInterval(callback, 1);
+  }
 };
 
 // java.util.HashMap;

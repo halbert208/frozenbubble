@@ -10,9 +10,17 @@
    body { margin: 0; }
    img { display: none; }
   </style>
+  <style type="text/css">  
+   /*fps style*/  
+   #fpsblock { position: absolute; left: 1em; bottom: 0; padding: .42em .2em .2em 4.3em; width: 6em; height: 3.8em; line-height: 1.8em; font-size: 1.4em; text-align: left; background: #FFF url(assets/fps.png) no-repeat .2em .6em; background-size: 4em 4em; z-index: 2; -moz-box-sizing: content-box; box-sizing: content-box; font-family: Droid Sans; white-space: nowrap;}  
+  </style>  
 </head>
 
 <body>
+<div id="fpsblock">  
+  <div>Frame Rate</div>  
+  <div><span id="current">10</span> FPS</div>  
+</div>  
 <canvas id="canvas"></canvas>
 <img src="res/drawable/app_frozen_bubble.png" />
 <img src="res/drawable/background.jpg" />
@@ -1180,6 +1188,42 @@
 <audio src="res/raw/rebound.ogg" preload="auto"></audio>
 <audio src="res/raw/stick.ogg" preload="auto"></audio>
 
+  <script>
+  var fps;
+  var meter = new FPSMeter();
+  var frame_counter = 0;
+  function FPSMeter(){
+    var sampleFPS = 0;
+    var lastSampledTime = 0;
+    var sampleFrames = 0;
+
+    this.sampleDuration = 500;
+    this.increment = function(){
+      sampleFrames++;
+    };
+    this.getFramerate = function(){
+      var diff = TimeUtil.getTimer()-lastSampledTime;
+      if(diff >= this.sampleDuration){
+        var rawFPS = sampleFrames/(diff/1000);
+        sampleFPS = FPSMeter.formatNumber(rawFPS);
+        sampleFrames = 0;
+        lastSampledTime = TimeUtil.getTimer();
+      }
+      return sampleFPS;
+    };
+  }
+  FPSMeter.formatNumber = function(val){
+    //format as XX.XX
+  return Math.floor(val*100)/100;
+  };
+
+  var TimeUtil = {
+    startTime: new Date().getTime(),
+    getTimer: function(){
+      return new Date().getTime()-TimeUtil.startTime;
+    }
+  };
+  </script>
   <script src="compat.js"></script>
   <script src="res.js"></script>
   <script src="SoundManager.js"></script>

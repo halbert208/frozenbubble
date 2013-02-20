@@ -58,6 +58,7 @@ function FrozenGame(background_arg, bubbles_arg, bubblesBlind_arg,
   this.fixedBubbles = 0;
   this.moveDown = 0;
   this.blinkDelay = 0;
+  this.lastBlinkDelay = GameThread.mLastTime;
   this.readyToFire = false;
   this.endOfGame = false;
   this.callFrozenify = false;
@@ -183,11 +184,17 @@ FrozenGame.prototype.initFrozenify = function initFrozenify() {
   this.frozenifyY = 12;
 
   this.callFrozenify = true;
+
+  this.lastFrozenify = GameThread.mLastTime;
 };
 
 FrozenGame.prototype.frozenify = function frozenify() {
   var gameLost = this.gameLost, soundManager = this.soundManager,
-      bubblePlay = this.bubblePlay, launchBubble = this.launchBubble
+      bubblePlay = this.bubblePlay, launchBubble = this.launchBubble;
+
+  if (GameThread.mLastTime - this.lastFrozenify < GameThread.FRAME_DELAY) return;
+  this.lastFrozenify = GameThread.mLastTime;
+  
   this.frozenifyX--;
   if (this.frozenifyX < 0) {
     this.frozenifyX = 7;
@@ -412,6 +419,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
 
         this.readyToFire = false;
         this.hurryTime = 0;
+        this.lastHurryTime = GameThread.mLastTime;
         this.removeSprite(hurrySprite);
       } else {
         penguin.updateState(PenguinSprite.STATE_VOID);
@@ -469,6 +477,7 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
       } else {
         this.fixedBubbles++;
         this.blinkDelay = 0;
+        this.lastBlinkDelay = GameThread.mLastTime;
 
         if (this.fixedBubbles === 8) {
             this.fixedBubbles = 0;
@@ -512,7 +521,9 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
     }
   }
 
-  if (movingBubble === null && !endOfGame) {
+  if (movingBubble === null && !endOfGame && 
+      GameThread.mLastTime - this.lastHurryTime > GameThread.FRAME_DELAY) {
+    this.lastHurryTime = GameThread.mLastTime;
     this.hurryTime++;
     // If hurryTime == 2 (1 + 1) we could be in the "Don't rush me"
     // mode.  Remove the sprite just in case the user switched
@@ -536,16 +547,23 @@ FrozenGame.prototype.play = function play(key_left, key_right, key_fire,
       this.blinkLine(this.blinkDelay);
     }
 
-    this.blinkDelay++;
+    if (GameThread.mLastTime - this.lastBlinkDelay > GameThread.FRAME_DELAY) {
+      this.lastBlinkDelay = GameThread.mLastTime;
+      this.blinkDelay++;
+    }
     if (this.blinkDelay === 40) {
       this.blinkDelay = 0;
     }
   } else if (this.fixedBubbles === 7) {
+
     if (this.blinkDelay < 15) {
       this.blinkLine(this.blinkDelay);
     }
 
-    this.blinkDelay++;
+    if (GameThread.mLastTime - this.lastBlinkDelay > GameThread.FRAME_DELAY) {
+      this.lastBlinkDelay = GameThread.mLastTime;
+      this.blinkDelay++;
+    }
     if (this.blinkDelay === 25) {
       this.blinkDelay = 0;
     }

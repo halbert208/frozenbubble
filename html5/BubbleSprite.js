@@ -193,7 +193,7 @@ BubbleSprite.prototype.move = function move() {
   var moveX = this.moveX, soundManager = this.soundManager,
       moveY = this.moveY, frozen = this.frozen,
       bubbleManager = this.bubbleManager, bubbleFace = this.bubbleFace;
-  var realX = this.realX += moveX;
+  var realX = this.realX += moveX * GameThread.mTick / GameThread.FRAME_DELAY;
 
   if (realX >= 414) {
     this.moveX = -moveX;
@@ -205,7 +205,7 @@ BubbleSprite.prototype.move = function move() {
     soundManager.playSound(FrozenBubble.SOUND_REBOUND);
   }
 
-  var realY = this.realY += moveY;
+  var realY = this.realY += moveY * GameThread.mTick / GameThread.FRAME_DELAY;
 
   var currentPosition = this.currentPosition();
   var neighbors = this.getNeighbors(currentPosition);
@@ -262,6 +262,7 @@ BubbleSprite.prototype.move = function move() {
       this.moveX = 0;
       this.moveY = 0;
       this.fixedAnim = 0;
+      this.lastFixedAnim = GameThread.mLastTime;
       soundManager.playSound(FrozenBubble.SOUND_STICK);
     }
   }
@@ -412,9 +413,9 @@ BubbleSprite.prototype.jump = function jump() {
     this.isFixed = false;
   }
 
-  this.moveY += FALL_SPEED;
-  this.realY += this.moveY;
-  this.realX += this.moveX;
+  this.moveY += FALL_SPEED * GameThread.mTick / GameThread.FRAME_DELAY;
+  this.realY += this.moveY * GameThread.mTick / GameThread.FRAME_DELAY;
+  this.realX += this.moveX * GameThread.mTick / GameThread.FRAME_DELAY;
 
   this.absoluteMove(new Point(this.realX, this.realY));
 
@@ -430,8 +431,8 @@ BubbleSprite.prototype.fall = function fall() {
 
   this.isFixed = false;
 
-  this.moveY += FALL_SPEED;
-  this.realY += this.moveY;
+  this.moveY += FALL_SPEED * GameThread.mTick / GameThread.FRAME_DELAY;
+  this.realY += this.moveY * GameThread.mTick / GameThread.FRAME_DELAY;
 
   this.absoluteMove(new Point(this.realX, this.realY));
 
@@ -475,7 +476,11 @@ BubbleSprite.prototype.paint = function paint(c, scale, dx, dy) {
 
   if (fixedAnim != -1) {
     Sprite.drawImage(bubbleFixed[fixedAnim], p.x, p.y, c, scale, dx, dy);
-    this.fixedAnim++;
+    
+    if (GameThread.mLastTime - this.lastFixedAnim > GameThread.FRAME_DELAY) {
+      this.lastFixedAnim = GameThread.mLastTime;
+      this.fixedAnim++;
+    }
     if (this.fixedAnim == 6) {
       this.fixedAnim = -1;
     }

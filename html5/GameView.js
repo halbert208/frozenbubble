@@ -349,9 +349,10 @@ GameThread.prototype.NewBmpWrap = function NewBmpWrap() {
 };
 
 GameThread.prototype.run = function run() {
-  /*
   var FRAME_DELAY = GameThread.FRAME_DELAY, mLastTime = this.mLastTime;
   var now = System.currentTimeMillis();
+  GameThread.mTick = now - this.mLastTime;
+  /*
   var delay = FRAME_DELAY + mLastTime - now;
   if (delay > 0) {
     return;
@@ -361,8 +362,9 @@ GameThread.prototype.run = function run() {
   var mRun = this.mRun, mSurfaceHolder = this.mSurfaceHolder,
       mMode = this.mMode, STATE_ABOUT = GameThread.STATE_ABOUT, 
       STATE_RUNNING = GameThread.STATE_RUNNING;
+
   if (!mRun) return;
-  // this.mLastTime = now;
+  GameThread.mLastTime = this.mLastTime = now;
   var c = null;
   try {
     if (this.surfaceOK()) {
@@ -388,6 +390,13 @@ GameThread.prototype.run = function run() {
     if (c != null) {
       mSurfaceHolder.unlockCanvasAndPost(c);
     }
+
+    meter.increment();
+    var fps = document.querySelector('#current');
+    if(fps && frame_counter % 50 == 0) {
+      fps.innerHTML = meter.getFramerate();
+    }
+    frame_counter++;
   }  
 };
 

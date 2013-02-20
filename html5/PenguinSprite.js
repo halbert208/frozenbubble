@@ -59,6 +59,8 @@ function PenguinSprite(sprites, rand) {
 
   this.finalState = STATE_VOID;
   this.nextPosition = 0;  
+
+  this.lastTime = 0;
 }
 
 PenguinSprite.prototype = new Sprite(null);
@@ -85,6 +87,10 @@ PenguinSprite.prototype.updateState = function updateState(state) {
       STATE_TURN_LEFT = PenguinSprite.STATE_TURN_LEFT,
       STATE_TURN_RIGHT = PenguinSprite.STATE_TURN_RIGHT,
       STATE_FIRE = PenguinSprite.STATE_FIRE;
+  
+  if (GameThread.mLastTime - this.lastTime < GameThread.FRAME_DELAY
+      && (state === finalState || state === STATE_VOID)) return;
+  this.lastTime = GameThread.mLastTime;
 
   if (finalState != STATE_VOID) {
     this.count++;
