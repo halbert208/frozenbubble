@@ -276,7 +276,7 @@ GameThread.prototype.scaleFrom = function scaleFrom(image, bmp) {
     image.bmp.recycle();
   }
 
-  if (mDisplayScale > 0.99999 && mDisplayScale < 1.00001) {
+  if (mDisplayScale > 0.99999 * 4 && mDisplayScale < 1.00001 * 4) {
     image.bmp = bmp;
     return;
   }
