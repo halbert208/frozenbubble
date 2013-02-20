@@ -280,8 +280,8 @@ GameThread.prototype.scaleFrom = function scaleFrom(image, bmp) {
     image.bmp = bmp;
     return;
   }
-  var dstWidth = (bmp.getWidth() * mDisplayScale);
-  var dstHeight = (bmp.getHeight() * mDisplayScale);
+  var dstWidth = (bmp.getWidth() * mDisplayScale) / 4;
+  var dstHeight = (bmp.getHeight() * mDisplayScale) / 4;
   image.bmp = Bitmap.createScaledBitmap(bmp, dstWidth, dstHeight, true);
 };
 
