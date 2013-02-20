@@ -60,6 +60,23 @@ Compressor.prototype.moveDown = function moveDown() {
 Compressor.prototype.paint = function paint(c, scale, dx, dy) {
   var steps = this.steps, compressor = this.compressor, 
       compressorHead = this.compressorHead;
+  c.drawBitmap(compressor.bmp,
+               (235 * scale + dx),
+               ((28 * -2 - 4) * scale + dy),
+               null);
+  c.drawBitmap(compressor.bmp,
+               (391 * scale + dx),
+               ((28 * -2 - 4) * scale + dy),
+               null);
+  c.drawBitmap(compressor.bmp,
+               (235 * scale + dx),
+               ((28 * -1 - 4) * scale + dy),
+               null);
+  c.drawBitmap(compressor.bmp,
+               (391 * scale + dx),
+               ((28 * -1 - 4) * scale + dy),
+               null);
+
   for (var i = 0; i < steps; i++) {
     c.drawBitmap(compressor.bmp,
                  (235 * scale + dx),
