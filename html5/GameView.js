@@ -280,8 +280,8 @@ GameThread.prototype.scaleFrom = function scaleFrom(image, bmp) {
     image.bmp = bmp;
     return;
   }
-  var dstWidth = (bmp.getWidth() * mDisplayScale) / 4;
-  var dstHeight = (bmp.getHeight() * mDisplayScale) / 4;
+  var dstWidth = (bmp.getWidth() * mDisplayScale) / 2;
+  var dstHeight = (bmp.getHeight() * mDisplayScale) / 2;
   image.bmp = Bitmap.createScaledBitmap(bmp, dstWidth, dstHeight, true);
 };
 
@@ -477,7 +477,7 @@ GameThread.prototype.doTouchEvent = function doTouchEvent(event) {
 GameThread.prototype.drawBackground = function drawBackground(c) {
   var mBackground = this.mBackground, mDisplayScale = this.mDisplayScale,
       mDisplayDX = this.mDisplayDX, mDisplayDY = this.mDisplayDY;
-  Sprite.drawImage(mBackground, 0, 0, c, mDisplayScale,
+  Sprite.drawImage(mBackground, 0, -50, c, mDisplayScale,
                    mDisplayDX, mDisplayDY);
 };
 
