@@ -57,12 +57,13 @@ function BubbleFont(fontMap) {
     's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '|', '{',
     '}', '[', ']', ' ', '\\', ' ', ' '];
   this.position  = [
-    0, 9, 16, 31, 39, 54, 69, 73, 80, 88, 96, 116, 121, 131,
-    137, 154, 165, 175, 187, 198, 210, 223, 234, 246, 259,
-    271, 276, 282, 293, 313, 324, 336, 351, 360, 370, 381,
-    390, 402, 411, 421, 435, 446, 459, 472, 483, 495, 508,
-    517, 527, 538, 552, 565, 578, 589, 602, 616, 631, 645,
-    663, 684, 700, 716, 732, 748, 764, 780, 796, 812 ];
+      0,   9,  16,  31,  39,  54,  69,  73,  80,  88, 
+     96, 116, 121, 131, 137,   2,  29,  51,  74,  97,
+    121, 144, 168, 192, 214, 238, 276, 282, 293, 313,
+    324, 336, 351, 360, 370, 381, 390, 402, 411, 421,
+    435, 446, 459, 472, 483, 495, 508, 517, 527, 538,
+    552, 565, 578, 589, 602, 616, 631, 645, 663, 684,
+    700, 716, 732, 748, 764, 780, 796, 812 ];
   this.SEPARATOR_WIDTH = 1;
   this.SPACE_CHAR_WIDTH = 6;
   this.fontMap = fontMap;
@@ -91,13 +92,13 @@ BubbleFont.prototype.paintChar = function paintChar(c, x, y, canvas,
   if (index === -1) {
     return 0;
   }
-  var imageWidth = position[index+1]-position[index];
+  var imageWidth = (position[index+1]-position[index]) / 2;
 
   clipRect.left = x;
   clipRect.right = x + imageWidth;
   clipRect.top = y;
   clipRect.bottom = y + 22;
-  Sprite.drawImageClipped(fontMap, x - position[index], y, clipRect,
+  Sprite.drawImageClipped(fontMap, x - position[index] / 2, y, clipRect,
                           canvas, scale, dx, dy);
 
   return imageWidth + SEPARATOR_WIDTH;
