@@ -586,7 +586,7 @@ Thread.prototype.start = function start() {
      window.msRequestAnimationFrame ||
      window.oRequestAnimationFrame)(animate);
   } else {
-    setInterval(callback, 1);
+    setInterval(callback, 14);
   }
 };
 
